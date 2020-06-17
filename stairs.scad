@@ -10,28 +10,46 @@ Main()
     stepheight = 2.3;
     wallThickness = 1.5;
     minimumFloorThickness = 1;
-    stepcount = floor((platformHeight-minimumFloorThickness)/stepheight);
+    tunnelSize = 18;
+
+    stepcount = floor((platformHeight - minimumFloorThickness) / stepheight);
     totalStepLength = stepcount * stepdepth;
 
     totalStepHeight = stepcount * stepheight;
     actualFloorThickness = platformHeight - totalStepHeight;
 
-    echo ("Total step height",totalStepHeight);
-    echo ("Actual floor thickness", actualFloorThickness);
-    
-    Stairs(width = width,
-           stepcount = stepcount,
-           stepdepth = stepdepth,
-           stepheight = stepheight);
+    echo("Total step height", totalStepHeight);
+    echo("Actual floor thickness", actualFloorThickness);
 
-    Staircase(width = width,
-              aboveGroundWallHeight = aboveGroundWallHeight, 
-              totalStepHeight = totalStepHeight,
-              wallThickness = wallThickness,
-              floorThickness = actualFloorThickness,
-              staircaselength = totalStepLength,
-              tunnelSize = 18);
-   
+    difference()
+    {
+        union()
+        {
+            Stairs(width = width,
+                   stepcount = stepcount,
+                   stepdepth = stepdepth,
+                   stepheight = stepheight);
+
+            Staircase(width = width,
+                      aboveGroundWallHeight = aboveGroundWallHeight,
+                      totalStepHeight = totalStepHeight,
+                      wallThickness = wallThickness,
+                      floorThickness = actualFloorThickness,
+                      staircaselength = totalStepLength,
+                      tunnelSize = tunnelSize);
+        }
+
+        Tunnel(width, totalStepHeight, totalStepLength, tunnelSize);
+    }
+}
+
+module Tunnel(width, totalStepHeight, totalStepLength, tunnelSize)
+{
+    tWidth = width + 20;
+    translate(
+        [ -tWidth / 2, -(totalStepLength + tunnelSize), -totalStepHeight ])
+        // color("red")
+        cube([ width + 20, tunnelSize, totalStepHeight ]);
 }
 
 module Stairs(width, stepcount, stepdepth, stepheight)
@@ -41,7 +59,13 @@ module Stairs(width, stepcount, stepdepth, stepheight)
             cube([ width, stepdepth * i, stepheight ]);
 }
 
-module Staircase(width, aboveGroundWallHeight, totalStepHeight, wallThickness, floorThickness, staircaselength, tunnelSize)
+module Staircase(width,
+                 aboveGroundWallHeight,
+                 totalStepHeight,
+                 wallThickness,
+                 floorThickness,
+                 staircaselength,
+                 tunnelSize)
 {
     totalWallHeight = aboveGroundWallHeight + totalStepHeight + floorThickness;
 
@@ -50,20 +74,14 @@ module Staircase(width, aboveGroundWallHeight, totalStepHeight, wallThickness, f
     x_offset = width / 2;
 
     // left wall
-    translate([ -x_offset, - totalWallLength, -(totalStepHeight + floorThickness) ])
-        rotate([ 90, 0, 90 ]) cube([ totalWallLength, totalWallHeight, wallThickness ]);
+    translate(
+        [ -x_offset, -totalWallLength, -(totalStepHeight + floorThickness) ])
+        rotate([ 90, 0, 90 ])
+            cube([ totalWallLength, totalWallHeight, wallThickness ]);
     // right wall
-    translate([ (x_offset - wallThickness), - totalWallLength, -(totalStepHeight + floorThickness) ])
-        rotate([ 90, 0, 90 ]) cube([ totalWallLength, totalWallHeight, wallThickness ]);
-    // endwall
-    translate([ -x_offset, - totalWallLength, - (floorThickness + totalStepHeight) ])
-        rotate([ 90, 0, 0 ]) 
-        cube([ width, totalWallHeight, wallThickness ]);
-    // floor
-    translate([ x_offset, - totalWallLength, - (floorThickness + totalStepHeight) ])
-        rotate([ 0, 0, 90 ]) 
-        cube([ totalWallLength, width, floorThickness ]);
-}
-
-
-
+    translate([
+        (x_offset - wallThickness),
+        -totalWallLength,
+        -(totalStepHeight + floorThickness)
+    ]) rotate([ 90, 0, 90 ])
+        cube([ totalWallLength, totalWallHeight, wallThickness ]);    // endwall    translate(        [ -x_offset, -totalWallLength, -(floorThickness + totalStepHeight) ])        rotate([ 90, 0, 0 ]) cube([ width, totalWallHeight, wallThickness ]);    // floor    translate(        [ x_offset, -totalWallLength, -(floorThickness + totalStepHeight) ])        rotate([ 0, 0, 90 ]) cube([ totalWallLength, width, floorThickness ]);}
