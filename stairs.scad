@@ -1,11 +1,26 @@
-stairs ();
+Main();
 
-module stairs ()
+module Main()
 {
-    width = 20;
-    stepheight = 3;
-    stepcount = 5;
-    for (i=[0:stepcount]) 
-        translate([0, i*10, 3*i]) cube([width,50-10*i,stepheight]);
-    
+    Stairs();
+    Staircase();
+}
+
+module Stairs(
+    width = 20,
+    stepheight = 2,
+    stepcount = 5,
+    stepdepth = 5
+)
+{
+    for (i = [0:stepcount])
+        translate([ 0, i * stepdepth, stepheight * i ])
+        cube([ width, stepdepth*(stepcount - i), stepheight ]);
+}
+
+module Staircase() {
+    thickness = 2;
+    length = 40;
+    //cube([ width, stepdepth*(stepcount - i), stepheight ]);
+
 }
