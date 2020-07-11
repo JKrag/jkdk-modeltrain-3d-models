@@ -2,7 +2,7 @@ Main();
 
 module Main() {
   width = 20;
-  platformHeight = 16.43;
+  platformHeight = 16.7;
   aboveGroundWallHeight = m_to_h0(1.0);
   stepdepth_rl_cm = 30;
   stepheight_rl_cm = 16;
@@ -34,14 +34,17 @@ module Main() {
   echo("Stepsanity (should be close to 62cm): ", 2 * stepheight_rl_cm + stepdepth_rl_cm);
   echo("Total Wall Length", totalWallLength);
 
-  difference() {
-    union() {
-      Staircase(platformHeight, aboveGroundWallHeight, width, wallThickness, actualFloorThickness, totalWallLength, lipWidth, lipThickness);
-      translate([ totalWallLength, width / 2, 0 ])
-        Stairs(width = width, stepcount = stepcount, stepdepth = stepdepth, stepheight = stepheight);
-      Top(width, aboveGroundWallHeight, topWidth, topThickness, wallThickness, totalWallLength);
+  union() {
+
+    difference() {
+      union() {
+        Staircase(platformHeight, aboveGroundWallHeight, width, wallThickness, actualFloorThickness, totalWallLength, lipWidth,
+                  lipThickness);
+        Top(width, aboveGroundWallHeight, topWidth, topThickness, wallThickness, totalWallLength);
+      }
+      Tunnel(width, totalStepHeight, totalStepLength, tunnelSize, wallThickness, tunnelOpenLeft, tunnelOpenRight);
     }
-    Tunnel(width, totalStepHeight, totalStepLength, tunnelSize, wallThickness, tunnelOpenLeft, tunnelOpenRight);
+    translate([ totalWallLength, width / 2, 0 ]) Stairs(width, stepcount, stepdepth, stepheight);
   }
 }
 
