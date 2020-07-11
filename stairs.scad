@@ -1,13 +1,16 @@
 Main();
 
 module Main() {
-  width = 24;
-  platformHeight = 16;
+  width = 20;
+  platformHeight = 16.43;
   aboveGroundWallHeight = m_to_h0(1.0);
   stepdepth_rl_cm = 30;
   stepheight_rl_cm = 16;
   wallThickness = 1.5;
   minimumFloorThickness = 1;
+  tunnelSize = 20;
+  lipWidth = cm_to_h0(10);
+  lipThickness = cm_to_h0(7);
   topWidth = cm_to_h0(20);
   topThickness = cm_to_h0(7);
 
