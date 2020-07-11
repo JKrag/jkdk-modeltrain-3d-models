@@ -9,6 +9,8 @@ module Main() {
   wallThickness = 1.5;
   minimumFloorThickness = 1;
   tunnelSize = 20;
+  tunnelOpenLeft = true;
+  tunnelOpenRight = true;
   lipWidth = cm_to_h0(10);
   lipThickness = cm_to_h0(7);
   topWidth = cm_to_h0(20);
@@ -39,7 +41,7 @@ module Main() {
         Stairs(width = width, stepcount = stepcount, stepdepth = stepdepth, stepheight = stepheight);
       Top(width, aboveGroundWallHeight, topWidth, topThickness, wallThickness, totalWallLength);
     }
-    Tunnel(width, totalStepHeight, totalStepLength, tunnelSize, wallThickness);
+    Tunnel(width, totalStepHeight, totalStepLength, tunnelSize, wallThickness, tunnelOpenLeft, tunnelOpenRight);
   }
 }
 
@@ -54,10 +56,16 @@ module Staircase(platformHeight, aboveGroundWallHeight, width, wallThickness, fl
   }
 }
 
-module Tunnel(width, totalStepHeight, totalStepLength, tunnelSize, wallThickness) {
-  oversize = 50;
-  tWidth = width + oversize;
-  translate([ wallThickness, width / 2 - tWidth / 2, -totalStepHeight ]) cube([ tunnelSize, tWidth, totalStepHeight ]);
+module Tunnel(width, totalStepHeight, totalStepLength, tunnelSize, wallThickness, tunnelOpenLeft, tunnelOpenRight) {
+  oversize = 10;
+  tWidth = width / 2 + oversize;
+  if (tunnelOpenLeft) {
+    translate([ wallThickness, -width / 2, -totalStepHeight ]) cube([ tunnelSize, tWidth, totalStepHeight ]);
+  }
+
+  if (tunnelOpenRight) {
+    translate([ wallThickness, width / 2, -totalStepHeight ]) cube([ tunnelSize, tWidth, totalStepHeight ]);
+  }
 }
 
 module Stairs(width, stepcount, stepdepth, stepheight) {
